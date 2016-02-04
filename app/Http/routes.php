@@ -11,5 +11,11 @@
 */
 
 Route::group(['middleware' => ['web']], function () {
-    Route::resource('polls', 'PollController');
+	Route::get('/', function(){
+		return view('pages.home');
+	});
+
+	Route::resource('poll', 'PollController');
+	
+	Route::post('/poll/{pollId}/{optionId}', 'PollController@addVote');
 });

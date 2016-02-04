@@ -7,7 +7,7 @@
 	<hr>
 	
 
-	<form method="POST" action="/polls">
+	<form method="POST" action="/poll">
 		@if (count($errors) > 0)
 			<div class="alert alert-danger">
 				<ul>
@@ -18,7 +18,7 @@
 			</div>
 		@endif			
 
-		@include('polls.form')
+		@include('poll.form')
 	</form>
 
 

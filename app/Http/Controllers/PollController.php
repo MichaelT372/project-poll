@@ -18,7 +18,7 @@ class PollController extends Controller
      */
     public function index()
     {
-        return Poll::first()->options;
+         return redirect('poll/create');
     }
 
     /**
@@ -28,7 +28,7 @@ class PollController extends Controller
      */
     public function create()
     {
-        return view('polls.create');
+        return view('poll.create');
     }
 
     /**
@@ -52,6 +52,10 @@ class PollController extends Controller
 
             $poll->options()->save($option);
         }
+
+        $path = 'poll/' . $poll->id;
+
+        return redirect($path);
     }
 
     /**
@@ -60,9 +64,11 @@ class PollController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($poll)
     {
-        //
+        $poll = Poll::findOrFail($poll);
+
+        return view('poll.show', compact('poll'));
     }
 
     /**
@@ -97,5 +103,18 @@ class PollController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function addVote($pollId, $optionId)
+    {
+        $poll = Poll::findOrFail($pollId);
+
+        $option = Option::findOrFail($optionId);
+
+        $option->votes += 1;
+
+        $option->save();
+
+        return view('poll.show', compact('poll'));
     }
 }
