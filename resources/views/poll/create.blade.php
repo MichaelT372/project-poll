@@ -5,7 +5,7 @@
 	<h1>Create A Poll</h1>
 
 	<hr>
-	
+
 
 	<form method="POST" action="/poll">
 		@if (count($errors) > 0)
@@ -16,7 +16,7 @@
 					@endforeach
 				</ul>
 			</div>
-		@endif			
+		@endif
 
 		@include('poll.form')
 	</form>

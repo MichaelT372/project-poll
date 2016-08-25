@@ -5,26 +5,50 @@
 
 		<div class="form-group">
 			<label for="stitle">Title:</label>
-			<input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}" required>
+			<input type="text" name="title" class="form-control" value="" required>
 		</div>
 
 		<div class="form-group">
-			<label for="option1">Option1:</label>
-			<input type="text" name="option1" id="option1" class="form-control" value="{{ old('option1') }}" required>
+			<label for="option1">Option 1:</label>
+			<input type="text" name="options[]" class="form-control" value="" required>
 		</div>
 
 		<div class="form-group">
-			<label for="option2">Option2:</label>
-			<input type="text" name="option2" id="option2" class="form-control" value="{{ old('option2') }}" required>
+			<label for="option2">Option 2:</label>
+			<input type="text" name="options[]" class="form-control" value="" required>
 		</div>
 
-	<div class="col-md-12">
+		<div class="more-options"></div>
+
+		<div class="form-group">
+			<button id="add" class="btn btn-primary">Add Option</button>
+			<button id="del" class="btn btn-primary">Delete Option</button>
+		</div>
+
+
 		<hr>
 
 		<div class="form-group">
 			<button type="submit" class="btn btn-primary">Create Poll</button>
 		</div>
+
 	</div>
 
+@section('js')
+<script type="text/javascript">
+	var options = 2;
 
-</div>
+	$('#add').on('click', function(e){
+		e.preventDefault();
+		options = options + 1;
+		var optionHTML = '<div class="form-group extra-option"><label for="option' + options +'">Option ' + options + ':</label><input type="text" name="options[]" class="form-control" value="" required></div>';
+		$('.more-options').append(optionHTML);
+	});
+
+	$('#del').on('click', function(e){
+		e.preventDefault();
+		options = (options >= 2) ? options - 1 : 2;
+		$('.extra-option').last().remove();
+	});
+</script>
+@stop

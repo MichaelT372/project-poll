@@ -18,7 +18,7 @@ class PollController extends Controller
      */
     public function index()
     {
-         return redirect('poll/create');
+         return view('poll.create');
     }
 
     /**
@@ -39,23 +39,14 @@ class PollController extends Controller
      */
     public function store(Request $request)
     {
-        $poll = new Poll($request->all());
+        $poll = Poll::create($request->only('title'));
 
-        $poll->save();
+        $options = collect($request->input('options'))->map(function($value){
+                    return new Option(['name' => $value]);
+                });
+        $poll->options()->saveMany($options);
 
-        $options = array_slice($request->all(), 2);
-
-        foreach ($options as $value) {
-            $option = new Option;
-
-            $option->name = $value;
-
-            $poll->options()->save($option);
-        }
-
-        $path = 'poll/' . $poll->id;
-
-        return redirect($path);
+        return redirect('poll/' . $poll->id);
     }
 
     /**
@@ -109,11 +100,7 @@ class PollController extends Controller
     {
         $poll = Poll::findOrFail($pollId);
 
-        $option = Option::findOrFail($optionId);
-
-        $option->votes += 1;
-
-        $option->save();
+        $option = Option::findOrFail($optionId)->increment('votes');
 
         return view('poll.show', compact('poll'));
     }
