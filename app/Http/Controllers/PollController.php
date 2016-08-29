@@ -18,7 +18,10 @@ class PollController extends Controller
      */
     public function index()
     {
-         return view('poll.create');
+
+        $polls = Poll::latest()->take(5)->get();
+
+        return view('poll.latest', compact('polls'));
     }
 
     /**
@@ -46,7 +49,7 @@ class PollController extends Controller
                 });
         $poll->options()->saveMany($options);
 
-        return redirect('poll/' . $poll->id);
+        return redirect('poll/' . $poll->slug);
     }
 
     /**
@@ -55,11 +58,27 @@ class PollController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($poll)
+    public function show($slug)
     {
-        $poll = Poll::findOrFail($poll);
+        $poll = Poll::whereSlug($slug)->firstOrFail();
 
         return view('poll.show', compact('poll'));
+    }
+
+    public function vote(Request $request)
+    {
+        $option = Option::findOrFail($request->input('option'));
+
+        $option->increment('votes');
+
+        return redirect('poll/' . $option->poll->slug . '/result');
+    }
+
+    public function result($slug)
+    {
+        $poll = Poll::whereSlug($slug)->firstOrFail();
+
+        return view('poll.result', compact('poll'));
     }
 
     /**
@@ -94,14 +113,5 @@ class PollController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function addVote($pollId, $optionId)
-    {
-        $poll = Poll::findOrFail($pollId);
-
-        $option = Option::findOrFail($optionId)->increment('votes');
-
-        return view('poll.show', compact('poll'));
     }
 }

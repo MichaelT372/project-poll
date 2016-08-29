@@ -19,7 +19,6 @@ class Poll extends Model
 	        }
 	        return true;
 	    });
-	    //static::bootTraits();
 	}
 
 	public function options()
@@ -55,5 +54,4 @@ class Poll extends Model
 	     $count = $this->where('slug', 'LIKE', "%$slug%")->count();
 	     return $count ? "{$slug}-{$count}" : $slug;
 	 }
-
 }

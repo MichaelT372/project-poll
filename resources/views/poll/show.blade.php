@@ -3,22 +3,37 @@
 @section('content')
 
 <div class="row">
-	<div class="col-md-12">
-		<h1>Poll: {{ $poll->title }}</h1>
+	<div class="col-md-6">
 
-		<ul>
-			@foreach ($poll->options as $option)
-				<li>Choice: {{ $option->name }} Votes: {{ $option->votes }}</li>
-				<form method="POST" action="/poll/{{ $option->poll_id }}/{{ $option->id }}">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+		      	<h1 class="panel-title">{{ $poll->title }}</h1>
+		    </div>
+		    <div class="panel-body">
+				<form class="form-horizontal" method="POST" action="/poll/vote">
 					{!! csrf_field() !!}
-					<button type="submit">Vote</button>
+					@foreach ($poll->options as $option)
+						<div class="form-group">
+							<div class="col-md-12">
+								<div class="radio">
+									<label>
+										<input type="radio" name="option" value="{{ $option->id }}" required>
+										{{ $option->name }}
+									</label>
+								</div>
+							</div>
+						</div>
+					@endforeach
+					<div class="form-group">
+						<div class="col-md-12">
+							<button type="submit" class="btn btn-primary">Vote</button>
+						</div>
+					</div>
 				</form>
-			@endforeach
-		</ul>
+		    </div>
+	  	</div>
+
 	</div>
 </div>
 
-
-
-
-@stop
+@endsection

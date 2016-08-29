@@ -1,38 +1,34 @@
-<div class="row">
+{{ csrf_field() }}
 
-	<div class="col-md-6">
-		{{ csrf_field() }}
+<div class="form-group">
+	<label for="stitle">Title:</label>
+	<input type="text" name="title" class="form-control" value="" required>
+</div>
 
-		<div class="form-group">
-			<label for="stitle">Title:</label>
-			<input type="text" name="title" class="form-control" value="" required>
-		</div>
+<div class="form-group">
+	<label for="option1">Option 1:</label>
+	<input type="text" name="options[]" class="form-control" value="" required>
+</div>
 
-		<div class="form-group">
-			<label for="option1">Option 1:</label>
-			<input type="text" name="options[]" class="form-control" value="" required>
-		</div>
+<div class="form-group">
+	<label for="option2">Option 2:</label>
+	<input type="text" name="options[]" class="form-control" value="" required>
+</div>
 
-		<div class="form-group">
-			<label for="option2">Option 2:</label>
-			<input type="text" name="options[]" class="form-control" value="" required>
-		</div>
+<div class="more-options"></div>
 
-		<div class="more-options"></div>
-
-		<div class="form-group">
-			<button id="add" class="btn btn-primary">Add Option</button>
-			<button id="del" class="btn btn-primary">Delete Option</button>
-		</div>
+<div class="form-group">
+	<button id="add" class="btn btn-primary">Add Option</button>
+	<button id="del" class="btn btn-primary">Delete Option</button>
+</div>
 
 
-		<hr>
+<hr>
 
-		<div class="form-group">
-			<button type="submit" class="btn btn-primary">Create Poll</button>
-		</div>
+<div class="form-group">
+	<button type="submit" class="btn btn-primary">Create Poll</button>
+</div>
 
-	</div>
 
 @section('js')
 <script type="text/javascript">
@@ -47,8 +43,8 @@
 
 	$('#del').on('click', function(e){
 		e.preventDefault();
-		options = (options >= 2) ? options - 1 : 2;
+		options = (options > 2) ? options - 1 : 2;
 		$('.extra-option').last().remove();
 	});
 </script>
-@stop
+@endsection
