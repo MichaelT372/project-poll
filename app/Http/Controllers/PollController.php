@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Poll;
 use App\Option;
+use App\Voter;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -58,7 +59,7 @@ class PollController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($slug)
+    public function show(Request $request, $slug)
     {
         $poll = Poll::whereSlug($slug)->firstOrFail();
 
@@ -70,6 +71,11 @@ class PollController extends Controller
         $option = Option::findOrFail($request->input('option'));
 
         $option->increment('votes');
+
+        $voter = Voter::create([
+            'poll_id' => $option->poll_id,
+            'ip_address' => $request->ip()
+        ]);
 
         return redirect('poll/' . $option->poll->slug . '/result');
     }

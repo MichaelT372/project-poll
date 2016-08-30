@@ -26,6 +26,11 @@ class Poll extends Model
 		return $this->hasMany('App\Option');
 	}
 
+	public function voters()
+	{
+		return $this->hasMany('App\Voter');
+	}
+
 	/**
 	 * Set the poll's title, adds ? if needed.
 	 *
@@ -48,10 +53,10 @@ class Poll extends Model
 	 * @return string
 	 */
 
-	 public function makeSlugFromTitle($title)
-	 {
-	     $slug = str_slug($title);
-	     $count = $this->where('slug', 'LIKE', "%$slug%")->count();
-	     return $count ? "{$slug}-{$count}" : $slug;
-	 }
+	public function makeSlugFromTitle($title)
+	{
+		$slug = strlen($title) > 10 ? substr(str_slug($title), 0, 10) : str_slug($title);
+		$count = $this->where('slug', 'LIKE', "%$slug%")->count();
+		return $count ? "{$slug}-{$count}" : $slug;
+	}
 }
