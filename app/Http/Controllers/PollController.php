@@ -19,7 +19,6 @@ class PollController extends Controller
      */
     public function index()
     {
-
         $polls = Poll::latest()->take(5)->get();
 
         return view('poll.latest', compact('polls'));
@@ -43,12 +42,26 @@ class PollController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'title' => 'required|min:10',
+            'options' => 'required|min:2|filled',
+            'g-recaptcha-response' => 'required|captcha'
+        ], [
+            'g-recaptcha-response.required' => 'You must complete the CAPTCHA'
+        ]);
+
         $poll = Poll::create($request->only('title'));
 
         $options = collect($request->input('options'))->map(function($value){
                     return new Option(['name' => $value]);
                 });
         $poll->options()->saveMany($options);
+
+        session()->flash('flash_message', [
+			'title' => 'Success!',
+			'message' => 'Your poll has been created.',
+			'type' => 'success'
+		]);
 
         return redirect('poll/' . $poll->slug);
     }
@@ -68,6 +81,12 @@ class PollController extends Controller
 
     public function vote(Request $request)
     {
+        $this->validate($request, [
+            'g-recaptcha-response' => 'required|captcha'
+        ], [
+            'g-recaptcha-response.required' => 'You must complete the CAPTCHA'
+        ]);
+
         $option = Option::findOrFail($request->input('option'));
 
         $option->increment('votes');
@@ -75,6 +94,12 @@ class PollController extends Controller
         $voter = Voter::create([
             'poll_id' => $option->poll_id,
             'ip_address' => $request->ip()
+        ]);
+
+        session()->flash('flash_message', [
+            'title' => 'Success!',
+            'message' => 'Your vote has been counted.',
+            'type' => 'success'
         ]);
 
         return redirect('poll/' . $option->poll->slug . '/result');

@@ -3,6 +3,7 @@
 <head>
 	<title>Project Poll</title>
 	<link rel="stylesheet" href="/css/app.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/sweetalert2/4.2.6/sweetalert2.min.css">
 </head>
 <body>
 
@@ -31,10 +32,13 @@
 		@yield('content')
 	</div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/sweetalert2/4.2.6/sweetalert2.min.js"></script>
 
-  @yield('js')
+@yield('js')
+@include('partials.alerts')
+
 
 </body>
 </html>
