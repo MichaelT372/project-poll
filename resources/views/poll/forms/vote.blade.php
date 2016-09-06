@@ -12,18 +12,33 @@
 
     {!! csrf_field() !!}
 
-    @foreach ($poll->options as $option)
-        <div class="form-group">
-            <div class="col-md-12">
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="option" value="{{ $option->id }}" required>
-                        {{ $option->name }}
-                    </label>
+    @if($poll->multiple_choice)
+        @foreach ($poll->options as $option)
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="option[]" value="{{ $option->id }}">
+                            {{ $option->name }}
+                        </label>
+                    </div>
                 </div>
             </div>
-        </div>
-    @endforeach
+        @endforeach
+    @else
+        @foreach ($poll->options as $option)
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="option[]" value="{{ $option->id }}" required>
+                            {{ $option->name }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        @endforeach
+    @endif
 
     {!! app('captcha')->display(); !!}
 

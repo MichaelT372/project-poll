@@ -8,6 +8,8 @@ use App\Poll;
 use App\Option;
 use App\Voter;
 use App\Http\Requests;
+use App\Http\Requests\StorePoll;
+use App\Http\Requests\VoteOnPoll;
 use App\Http\Controllers\Controller;
 
 class PollController extends Controller
@@ -40,17 +42,9 @@ class PollController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePoll $request)
     {
-        $this->validate($request, [
-            'title' => 'required|min:10',
-            'options' => 'required|min:2|filled',
-            'g-recaptcha-response' => 'required|captcha'
-        ], [
-            'g-recaptcha-response.required' => 'You must complete the CAPTCHA'
-        ]);
-
-        $poll = Poll::create($request->only('title'));
+        $poll = Poll::create($request->all());
 
         $options = collect($request->input('options'))->map(function($value){
                     return new Option(['name' => $value]);
@@ -79,22 +73,20 @@ class PollController extends Controller
         return view('poll.show', compact('poll'));
     }
 
-    public function vote(Request $request)
+    public function vote(VoteOnPoll $request)
     {
-        $this->validate($request, [
-            'g-recaptcha-response' => 'required|captcha'
-        ], [
-            'g-recaptcha-response.required' => 'You must complete the CAPTCHA'
-        ]);
+        $poll = Option::findOrFail($request->input('option.0'))->poll;
 
-        $option = Option::findOrFail($request->input('option'));
+        foreach ($request->input('option') as $option) {
+            Option::findOrFail($option)->increment('votes');
+        }
 
-        $option->increment('votes');
-
-        $voter = Voter::create([
-            'poll_id' => $option->poll_id,
-            'ip_address' => $request->ip()
-        ]);
+        if ($poll->ip_checking == 1) {
+            $voter = Voter::create([
+                'poll_id' => $poll->id,
+                'ip_address' => $request->ip()
+            ]);
+        }
 
         session()->flash('flash_message', [
             'title' => 'Success!',
@@ -102,7 +94,7 @@ class PollController extends Controller
             'type' => 'success'
         ]);
 
-        return redirect('poll/' . $option->poll->slug . '/result');
+        return redirect('poll/' . $poll->slug . '/result');
     }
 
     public function result($slug)

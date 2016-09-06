@@ -8,7 +8,9 @@ class Poll extends Model
 {
 	protected $fillable = [
 		'title',
-		'slug'
+		'slug',
+		'ip_checking',
+		'multiple_choice'		
 	];
 
 	protected static function boot()
