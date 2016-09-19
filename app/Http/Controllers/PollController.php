@@ -44,7 +44,11 @@ class PollController extends Controller
      */
     public function store(StorePoll $request)
     {
-        $poll = Poll::create($request->all());
+        if (\Auth::check()) {
+            $poll = \Auth::user()->polls()->create($request->all());
+        } else {
+            $poll = Poll::create($request->all());
+        }
 
         $options = collect($request->input('options'))->map(function($value){
                     return new Option(['name' => $value]);

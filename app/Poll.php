@@ -10,7 +10,7 @@ class Poll extends Model
 		'title',
 		'slug',
 		'ip_checking',
-		'multiple_choice'		
+		'multiple_choice'
 	];
 
 	protected static function boot()
@@ -21,6 +21,11 @@ class Poll extends Model
 	        }
 	        return true;
 	    });
+	}
+
+	public function user()
+	{
+		return $this->belongsTo('App\User');
 	}
 
 	public function options()

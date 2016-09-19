@@ -1,16 +1,18 @@
-@extends('layout')
+@extends('layouts.app')
 
 @section('content')
 
-<div class="row">
-	<div class="col-md-6">
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
 
-		<h1>Create A Poll</h1>
+			<h1>Create A Poll</h1>
 
-		<hr>
+			<hr>
 
-		@include('poll.forms.make')
+			@include('poll.forms.make')
 
+		</div>
 	</div>
 </div>
 

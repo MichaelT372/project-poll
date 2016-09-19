@@ -14,6 +14,8 @@ class CreatePollsTable extends Migration
     {
         Schema::create('polls', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id')->unsigned()->default('0');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('title');
             $table->string('slug');
             $table->boolean('ip_checking')->default(false);
