@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\Auth;
 
 use Socialite;
+use App\Http\Requests;
+use Illuminate\Http\Request;
+use App\SocialAccountService;
+use App\Http\Controllers\Controller;
 
-class AuthController extends Controller
+
+class OAuthController extends Controller
 {
     /**
-     * Redirect the user to the GitHub authentication page.
+     * Redirect the user to the authentication page.
      *
      * @return Response
      */
@@ -17,14 +22,16 @@ class AuthController extends Controller
     }
 
     /**
-     * Obtain the user information from GitHub.
+     * Obtain the user information from the provider.
      *
      * @return Response
      */
-    public function handleProviderCallback()
+    public function handleProviderCallback(SocialAccountService $service)
     {
-        $user = Socialite::driver('facebook')->user();
+        $user = $service->createOrGetUser(Socialite::driver('facebook')->user());
 
-        // $user->token;
+        \Auth::login($user, true);
+
+        return redirect()->to('/home');
     }
 }
