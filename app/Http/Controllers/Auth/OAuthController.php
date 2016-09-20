@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\SocialAccountService;
 use App\Http\Controllers\Controller;
 
-
 class OAuthController extends Controller
 {
     /**
@@ -16,9 +15,9 @@ class OAuthController extends Controller
      *
      * @return Response
      */
-    public function redirectToProvider()
+    public function redirectToProvider($provider)
     {
-        return Socialite::driver('facebook')->redirect();
+        return Socialite::driver($provider)->redirect();
     }
 
     /**
@@ -26,9 +25,9 @@ class OAuthController extends Controller
      *
      * @return Response
      */
-    public function handleProviderCallback(SocialAccountService $service)
+    public function handleProviderCallback(SocialAccountService $service, $provider)
     {
-        $user = $service->createOrGetUser(Socialite::driver('facebook')->user());
+        $user = $service->createOrGetUser(Socialite::driver($provider));
 
         \Auth::login($user, true);
 

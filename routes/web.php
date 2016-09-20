@@ -14,5 +14,5 @@ Route::get('/poll/{slug}/result', 'PollController@result');
 
 
 Auth::routes();
-Route::get('/auth/facebook', 'Auth\OAuthController@redirectToProvider');
-Route::get('/auth/facebook/callback', 'Auth\OAuthController@handleProviderCallback');
+Route::get('/auth/{provider}', 'Auth\OAuthController@redirectToProvider');
+Route::get('/auth/{provider}/callback', 'Auth\OAuthController@handleProviderCallback');

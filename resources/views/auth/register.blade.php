@@ -74,6 +74,9 @@
                             </div>
                         </div>
                     </form>
+                    <a href="/auth/facebook">FB Login</a>
+                    <a href="/auth/google">Google Login</a>
+                    <a href="/auth/github">GitHub Login</a>
                 </div>
             </div>
         </div>
