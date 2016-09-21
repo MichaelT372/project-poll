@@ -19,13 +19,15 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'email' => $faker->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
+        'type' => 1
     ];
 });
 
 $factory->define(App\Poll::class, function (Faker\Generator $faker) {
     return [
         'title' => $faker->sentence($nbWords = 10, $variableNbWords = true),
-    	'slug' => $faker->uuid
+    	'ip_checking' => $faker->boolean,
+        'multiple_choice' => $faker->boolean
     ];
 });
 
