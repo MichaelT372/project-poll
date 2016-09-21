@@ -9,6 +9,10 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    const PRIMARY_ADMIN_ID = 1;
+    const TYPE_NORMAL = 1;
+    const TYPE_ADMIN  = 2;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -31,4 +35,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Poll');
     }
+
+    public function getIsAdminAttribute()
+    {
+        return $this->id == User::PRIMARY_ADMIN_ID || $this->type == User::TYPE_ADMIN;
+    }  
 }
