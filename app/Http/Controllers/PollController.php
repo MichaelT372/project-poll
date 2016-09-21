@@ -21,7 +21,7 @@ class PollController extends Controller
      */
     public function index()
     {
-        $polls = Poll::latest()->take(5)->get();
+        $polls = Poll::paginate(15);
 
         return view('poll.latest', compact('polls'));
     }

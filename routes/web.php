@@ -16,4 +16,8 @@ Route::get('/auth/{provider}/callback', 'Auth\OAuthController@handleProviderCall
 Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function()
 {
     Route::get('/', 'AdminController@index');
+    Route::get('/users', 'AdminController@users');
+    Route::get('/user/{id}', 'AdminController@user');
+    Route::get('/polls', 'AdminController@polls');
+    Route::get('/poll/{slug}', 'AdminController@poll');
 });
