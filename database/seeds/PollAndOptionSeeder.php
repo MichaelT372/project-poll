@@ -12,8 +12,8 @@ class PollAndOptionSeeder extends Seeder
     public function run()
     {
         App\User::create([
-            'name' => 'Mr Admin',
-            'email' => 'mradmin@gmail.com',
+            'name' => 'Admin',
+            'email' => 'admin@gmail.com',
             'password' => bcrypt('password'),
             'remember_token' => str_random(10),
             'type' => 2
